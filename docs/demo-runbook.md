@@ -8,6 +8,28 @@ This repository is intentionally vulnerable and learning-only. All catalog
 records are synthetic. Do not run a public server, connect external data,
 paste a real credential, or merge the demonstration fix.
 
+## Verified preparation snapshot
+
+Verified on **2026-10-08 (UTC)**. Recheck these settings before presenting;
+this is a recorded rehearsal, not a guarantee that settings cannot change.
+
+| Control / evidence | Verified result |
+| --- | --- |
+| Dependency graph | On |
+| Dependabot alerts | On |
+| Dependabot security updates | Enabled, not paused |
+| Secret Protection | Enabled; the settings UI reported no additional licenses consumed |
+| Repository push protection | Enabled; an actual training-token push was rejected |
+| Copilot Autofix | On; native generation requested for alert 1, result and PR pending |
+| CodeQL | Advanced workflow succeeded; default setup not configured |
+| CodeQL finding | [Alert 1: `py/sql-injection`](https://github.com/erinlan01/ai-security-demo/security/code-scanning/1), open on `main` |
+| Implementation checks | [CI succeeded](https://github.com/erinlan01/ai-security-demo/actions/runs/37802970287); [CodeQL succeeded](https://github.com/erinlan01/ai-security-demo/actions/runs/37802970256) |
+
+No custom pattern is needed for the verified push-protection rehearsal.
+Custom-pattern controls were not found in the current UI; do not claim that
+capability or purchase products to enable it. Required checks and branch
+protection are not established by this snapshot.
+
 ## Prepare before presenting
 
 1. Open the repository's **Actions** and **Security** tabs. Verify the `CI` and
@@ -34,11 +56,9 @@ paste a real credential, or merge the demonstration fix.
    tests passing. Do not add a test on `main` that locks in vulnerable behavior.
 6. The coordinating presenter owns repository settings. Verify required checks
    and human-review controls separately if you plan to claim enforcement.
-   Repository secret scanning and push protection have been enabled by the
-   presenter, but custom-pattern controls have not been found in this setup.
-   The custom-pattern demonstration remains **unverified / not available in
-   the current UI**: skip it unless capability is explicitly confirmed.
-   Files in this repo do not enable these settings.
+   Recheck repository secret scanning and push protection, and rehearse the
+   official inactive training-token exercise below in isolation. Files in this
+   repo do not enable these settings.
 
 Do not substitute a manually authored fix for a native Autofix suggestion.
 If no suggestion is available, show the real alert and explain that generation
@@ -54,54 +74,63 @@ is pending rather than implying the workflow has completed.
 | 3:15-4:30 | Separate, unmerged fix PR | Show Change / Evidence / Human review. Inspect parameter binding and preservation of the catalog response. Do not accept simplistic quote removal as a security fix. |
 | 4:30-5:30 | PR CI and CodeQL results | Show benign tests and the fix-branch regression test. Confirm the target alert is addressed in PR analysis, while it remains open on `main` because the PR is unmerged. |
 | 5:30-6:30 | Human review | Ask the reviewer to check the whole diff, behavior, and evidence. Passing tests are not a security guarantee. End the core demo without merging. |
-| 6:30-8:00 | Optional, preverified push protection | Demonstrate a repository custom pattern rejecting a synthetic marker before it enters GitHub, only if preparation below is complete. |
+| 6:30-8:00 | Optional, preverified push protection | Show the rejection of GitHub Skills' inactive training token before it enters GitHub. Explain why preventing a push differs from detecting a committed secret. |
 
 For a five-minute slot, shorten the diff walkthrough and omit the optional
 push-protection segment. No application server is required.
 
-## Optional synthetic custom-pattern demonstration
+## Optional verified push-protection demonstration
 
-**Status: custom-pattern controls have not been found in the current setup;
-skip this segment.** The instructions below are conditional preparation, not
-evidence of a working capability. This is separate from CodeQL and Autofix.
-Do not purchase products or change organization-wide settings to enable it.
+Use only the **inactive training token** supplied by
+[GitHub Skills: Enable push protection](https://github.com/skills/introduction-to-secret-scanning/blob/main/.github/steps/3-enable-push-protection.md).
+The presenter verified that official source before the rehearsal. Open the
+source again before repeating the exercise and confirm it still identifies
+the token as inactive training material. If it has changed or cannot be
+verified, skip the segment. Do not invent a token-shaped substitute or use
+your own token, even an expired one. The full training token is intentionally
+not reproduced here.
 
-Built-in provider-pattern push protection is a separate demonstration. The
-presenter may use a preverified, nonfunctional synthetic fixture for a supported
-provider pattern, never an issued credential. A token-shaped string is not
-guaranteed to be detected. Show a real rejection before claiming protection,
-do not bypass it, and do not publish the fixture in this repository.
+### Recorded rejection
 
-The presenter may create a repository-level secret-scanning custom pattern
-named `Synthetic training marker` with secret format:
+The isolated local rehearsal commit
+`80ebb70d8a65b96d05cf17062d3973ac20245a34` was pushed toward
+`HEAD:refs/heads/demo/push-protection-rehearsal`. GitHub rejected the push with
+exit code `1`, `GH013`, and `GITHUB PUSH PROTECTION`, identifying a
+**GitHub Personal Access Token** in `push-protection-training.txt:3`.
 
-```text
-DEMO_ONLY_[A-Z0-9]{24}
-```
+No bypass was used, no secret-bearing remote branch was created, and no real
+credential was involved. The local commit is evidence of an attempted push,
+not a commit available on GitHub. Keep any displayed rejection output free
+of the full training token and any bypass URL.
 
-Use pattern boundaries compatible with GitHub's custom-pattern editor so
-only a complete marker is matched. The marker represents **no service or
-credential** and has no authentication capability. Never use a provider token,
-even an expired one, and never paste any private material into the pattern editor.
+### Repeat safely
 
-1. Verify secret scanning and push protection are available and enabled for
-   this public repository, and confirm that the custom pattern can itself be
-   published and enabled for push protection. Run the editor's dry run first.
-   If those controls are unavailable, skip this segment.
-2. In an isolated disposable local checkout, create a disposable demo branch
-   and a text file containing a marker built from `DEMO_ONLY_` followed by
-   exactly 24 uppercase letters or digits. Do not modify `main` or the Autofix
-   branch. Keep the complete marker out of shared documentation and logs.
-3. Commit that synthetic-only file locally, then attempt a normal push.
-   A rejected push with the custom-pattern explanation is the expected
-   evidence. **Do not bypass** the warning or grant an exception.
-4. If the push succeeds, do not claim protection worked. Stop, remove the
-   disposable remote branch, and revisit the configuration before presenting.
-5. After a blocked push, discard the isolated local demo checkout/branch.
-   Confirm neither the marker nor a bypass entered `main` or the fix PR.
+1. Verify repository push protection is still enabled. Use an isolated,
+   disposable clone with no unrelated work, starting from clean `main`.
+   Create a disposable local branch; do not use `main` or the Autofix branch.
+2. Copy only the official inactive training token into a local
+   `push-protection-training.txt` fixture and commit it locally. Do not place
+   it in this repository's maintained documentation, application, or PR.
+3. Attempt a normal push to `demo/push-protection-rehearsal`. Show the actual
+   rejection and provider detection. **Do not bypass**, grant an exception,
+   or follow a bypass link. No custom pattern is required.
+4. If the push succeeds, stop and do not claim protection worked. Remove the
+   disposable remote branch and investigate settings and the training source
+   before presenting again. Do not replace the fixture with a real credential.
+5. After rejection, remove the training token from **every unpushed commit**
+   before any retry. Deleting the file in a new commit is insufficient: its
+   earlier content remains in the history GitHub scans. For this disposable
+   exercise, discard the isolated clone and start a fresh clone from clean
+   remote `main`; do not discard a checkout containing unrelated work.
+6. Confirm the rejected remote branch does not exist, no bypass was granted,
+   and neither `main` nor the Autofix PR contains the fixture.
 
-The repository contains the pattern description, not a complete matching
-marker. This avoids pre-populating the exercise with secret-scanning alerts.
+**An empty secret-scanning alerts page is compatible with a successful
+rejection.** The leak was prevented before the commit reached the repository.
+Do not present this as detection or remediation of a historical committed
+secret. A real historical leak requires a separate response, including
+revoking/rotating the credential and cleaning affected history; this exercise
+does not create or demonstrate such a leak.
 
 ## Troubleshooting and repeatability
 
@@ -114,7 +143,9 @@ marker. This avoids pre-populating the exercise with secret-scanning alerts.
 | Fix PR CI fails | Inspect and correct the suggestion on its branch, preserving its provenance. Rerun the checks before claiming success. |
 | Alert still open on `main` | Expected: the fixed PR is deliberately unmerged. Show the PR's analysis separately. |
 | Branch protections are absent | Describe human review as the demo process, not an enforced repository guarantee. |
-| Custom pattern does not block | Stop that segment; do not bypass or replace it with a real secret. |
+| Training-token push does not block | Stop that segment; verify settings and the official training source. Never bypass or replace it with a real secret. |
+| Secret-scanning alerts remain empty after rejection | Expected for a prevented leak; show push-rejection evidence rather than claiming a historical alert exists. |
+| Retry remains blocked after deleting the file | The token is still in an earlier unpushed commit. Remove it from all unpushed history, or discard only the isolated disposable clone and start clean. |
 
 Reuse the existing alert and unmerged PR for the next presentation. Avoid
 duplicate fix PRs or closing/dismissing the original alert. Dependency updates
@@ -125,4 +156,4 @@ are ordinary reviewed maintenance, not part of the vulnerable fixture.
 - [CodeQL SQL injection query](https://codeql.github.com/codeql-query-help/python/py-sql-injection/)
 - [Responsible use of Copilot Autofix](https://docs.github.com/en/code-security/responsible-use/security-and-quality-ai-features)
 - [Advanced CodeQL setup](https://docs.github.com/en/code-security/code-scanning/creating-an-advanced-setup-for-code-scanning)
-- [Secret-scanning custom patterns](https://docs.github.com/en/code-security/how-tos/secure-your-secrets/customize-leak-detection/define-custom-patterns)
+- [GitHub Skills inactive training-token exercise](https://github.com/skills/introduction-to-secret-scanning/blob/main/.github/steps/3-enable-push-protection.md)

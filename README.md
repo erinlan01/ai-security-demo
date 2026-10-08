@@ -11,8 +11,8 @@ records, or deployment instructions.
 
 > **Do not deploy this application or reuse its vulnerable query.**
 > `GET /catalog` intentionally interpolates a request parameter into a SQLite
-> SELECT. This fixture is expected to trigger CodeQL `py/sql-injection`.
-> `main` retains the alert for repeatable demos; the native Autofix fix remains
+> SELECT. CodeQL has confirmed [`py/sql-injection`](https://github.com/erinlan01/ai-security-demo/security/code-scanning/1).
+> `main` retains the alert for repeatable demos. Keep any native Autofix fix
 > on a separate, unmerged pull request.
 
 ## Run locally (optional)
@@ -57,8 +57,8 @@ disable scanning, dismiss the fixture alert, merge its fix, or enable auto-merge
 just to make the demo look green.
 
 See the [presenter runbook](docs/demo-runbook.md) for preparation, timing,
-review criteria, and the optional synthetic custom-pattern push-protection
-demonstration. Its repository-side setup is **pending** until the presenter
-verifies it; custom-pattern controls have not been found in the current setup,
-so omit that segment rather than promise it works. Built-in provider-pattern
-push protection is a separate capability. No real token should ever be used.
+review criteria, verified repository settings, and the optional push-protection
+demonstration. A rehearsal using GitHub Skills' official **inactive training
+token** was rejected by GitHub push protection without a bypass or a remote
+training branch. No custom pattern is required. The runbook links the official
+source without reproducing the token; never substitute a real credential.
