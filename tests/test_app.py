@@ -52,3 +52,18 @@ def test_requests_do_not_change_the_catalog(client):
     before = client.get("/catalog").get_json()
     client.get("/catalog", query_string={"category": "books"})
     assert client.get("/catalog").get_json() == before
+
+
+@pytest.mark.parametrize("category", ["books'", "books' OR '1'='1"])
+def test_quoted_category_is_literal_data_and_preserves_benign_behavior(client, category):
+    before = client.get("/catalog", query_string={"category": "books"})
+    assert before.status_code == 200
+    assert [row["id"] for row in before.get_json()] == [1, 3]
+
+    response = client.get("/catalog", query_string={"category": category})
+    assert response.status_code == 200
+    assert response.get_json() == []
+
+    after = client.get("/catalog", query_string={"category": "books"})
+    assert after.status_code == 200
+    assert after.get_json() == before.get_json()
