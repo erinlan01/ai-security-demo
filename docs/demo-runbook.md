@@ -34,8 +34,11 @@ paste a real credential, or merge the demonstration fix.
    tests passing. Do not add a test on `main` that locks in vulnerable behavior.
 6. The coordinating presenter owns repository settings. Verify required checks
    and human-review controls separately if you plan to claim enforcement.
-   Secret scanning and custom-pattern push protection setup is **pending**
-   until explicitly configured and tested; files in this repo do not enable it.
+   Repository secret scanning and push protection have been enabled by the
+   presenter, but custom-pattern controls have not been found in this setup.
+   The custom-pattern demonstration remains **unverified / not available in
+   the current UI**: skip it unless capability is explicitly confirmed.
+   Files in this repo do not enable these settings.
 
 Do not substitute a manually authored fix for a native Autofix suggestion.
 If no suggestion is available, show the real alert and explain that generation
@@ -58,9 +61,16 @@ push-protection segment. No application server is required.
 
 ## Optional synthetic custom-pattern demonstration
 
-**Status: presenter-side configuration pending.** This is separate from CodeQL
-and Autofix. Do not promise it works until the repository's available controls
-have been checked. Do not purchase products or change organization-wide settings.
+**Status: custom-pattern controls have not been found in the current setup;
+skip this segment.** The instructions below are conditional preparation, not
+evidence of a working capability. This is separate from CodeQL and Autofix.
+Do not purchase products or change organization-wide settings to enable it.
+
+Built-in provider-pattern push protection is a separate demonstration. The
+presenter may use a preverified, nonfunctional synthetic fixture for a supported
+provider pattern, never an issued credential. A token-shaped string is not
+guaranteed to be detected. Show a real rejection before claiming protection,
+do not bypass it, and do not publish the fixture in this repository.
 
 The presenter may create a repository-level secret-scanning custom pattern
 named `Synthetic training marker` with secret format:
@@ -115,4 +125,4 @@ are ordinary reviewed maintenance, not part of the vulnerable fixture.
 - [CodeQL SQL injection query](https://codeql.github.com/codeql-query-help/python/py-sql-injection/)
 - [Responsible use of Copilot Autofix](https://docs.github.com/en/code-security/responsible-use/security-and-quality-ai-features)
 - [Advanced CodeQL setup](https://docs.github.com/en/code-security/code-scanning/creating-an-advanced-setup-for-code-scanning)
-- [Secret-scanning custom patterns](https://docs.github.com/en/code-security/secret-scanning/using-advanced-secret-scanning-and-push-protection-features/defining-custom-patterns-for-secret-scanning)
+- [Secret-scanning custom patterns](https://docs.github.com/en/code-security/how-tos/secure-your-secrets/customize-leak-detection/define-custom-patterns)

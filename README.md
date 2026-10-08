@@ -59,4 +59,6 @@ just to make the demo look green.
 See the [presenter runbook](docs/demo-runbook.md) for preparation, timing,
 review criteria, and the optional synthetic custom-pattern push-protection
 demonstration. Its repository-side setup is **pending** until the presenter
-verifies it; no real token should ever be used.
+verifies it; custom-pattern controls have not been found in the current setup,
+so omit that segment rather than promise it works. Built-in provider-pattern
+push protection is a separate capability. No real token should ever be used.
