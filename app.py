@@ -40,9 +40,8 @@ def catalog():
     connection = open_catalog()
     try:
         if category:
-            # INTENTIONALLY VULNERABLE: retain on main for the native Autofix demo.
-            query = f"SELECT id, name, category FROM catalog WHERE category = '{category}' ORDER BY id"
-            rows = connection.execute(query).fetchall()
+            query = "SELECT id, name, category FROM catalog WHERE category = ? ORDER BY id"
+            rows = connection.execute(query, (category,)).fetchall()
         else:
             rows = connection.execute(
                 "SELECT id, name, category FROM catalog ORDER BY id"
