@@ -20,15 +20,45 @@ this is a recorded rehearsal, not a guarantee that settings cannot change.
 | Dependabot security updates | Enabled, not paused |
 | Secret Protection | Enabled; the settings UI reported no additional licenses consumed |
 | Repository push protection | Enabled; an actual training-token push was rejected |
-| Copilot Autofix | On; native generation requested for alert 1, result and PR pending |
+| Copilot Autofix | On; native generation succeeded and produced [draft PR #1](https://github.com/erinlan01/ai-security-demo/pull/1), open and unmerged |
 | CodeQL | Advanced workflow succeeded; default setup not configured |
 | CodeQL finding | [Alert 1: `py/sql-injection`](https://github.com/erinlan01/ai-security-demo/security/code-scanning/1), open on `main` |
 | Implementation checks | [CI succeeded](https://github.com/erinlan01/ai-security-demo/actions/runs/37802970287); [CodeQL succeeded](https://github.com/erinlan01/ai-security-demo/actions/runs/37802970256) |
+| Fix PR checks | At `55c107c`, [CI succeeded](https://github.com/erinlan01/ai-security-demo/actions/runs/37803926120) and [CodeQL succeeded](https://github.com/erinlan01/ai-security-demo/actions/runs/37803926204); PR merge-ref analysis reported zero findings |
 
 No custom pattern is needed for the verified push-protection rehearsal.
 Custom-pattern controls were not found in the current UI; do not claim that
 capability or purchase products to enable it. Required checks and branch
 protection are not established by this snapshot.
+
+### Fix provenance and regression evidence
+
+GitHub's native Autofix generated
+[`f2b59a0`](https://github.com/erinlan01/ai-security-demo/commit/f2b59a08566b4b20191c51a60229ba2d97981868),
+which replaces SQL interpolation with a constant `WHERE category = ?` query
+and bound parameters. It was committed through the native alert flow, not
+replaced with a manually written fix.
+
+A separate test-only follow-up,
+[`55c107c`](https://github.com/erinlan01/ai-security-demo/commit/55c107ceb1c0aa429c27698be14b18b888adc06d),
+adds two regression cases: a category containing an apostrophe and an
+injection-shaped category. Both must be treated as literal data, return an
+empty array with HTTP 200, and preserve benign book queries before and after
+on the same client. This follow-up is not part of the native generated fix.
+
+| Local command / check on the fix branch | Result |
+| --- | --- |
+| `python -m pytest -q` | 10 passed: 8 existing tests and 2 new regression cases |
+| `python -m compileall -q app.py tests` | Passed |
+| `python -m pip check` | No broken requirements |
+| New cases selected with `-k quoted_category`, using the unchanged `main` application module | 2 failed, 8 deselected, as expected: an apostrophe causes a SQL error; injection-shaped input returns all three rows instead of an empty array |
+
+The baseline check loaded `main`'s application explicitly before running the
+fix worktree's tests; no source replacement was needed. These results establish
+that the regression tests catch the original behavior rather than merely
+passing on both versions. The vulnerable application and original eight tests
+remain on `main`. The fix PR is deliberately **draft, open, and unmerged**;
+passing checks do not mean human review or approval has occurred.
 
 ## Prepare before presenting
 

@@ -12,8 +12,9 @@ records, or deployment instructions.
 > **Do not deploy this application or reuse its vulnerable query.**
 > `GET /catalog` intentionally interpolates a request parameter into a SQLite
 > SELECT. CodeQL has confirmed [`py/sql-injection`](https://github.com/erinlan01/ai-security-demo/security/code-scanning/1).
-> `main` retains the alert for repeatable demos. Keep any native Autofix fix
-> on a separate, unmerged pull request.
+> `main` retains the alert for repeatable demos. The native Autofix and separate
+> regression tests are in [draft PR #1](https://github.com/erinlan01/ai-security-demo/pull/1).
+> Keep this demonstration fix unmerged.
 
 ## Run locally (optional)
 
